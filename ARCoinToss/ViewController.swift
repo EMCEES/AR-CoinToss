@@ -12,10 +12,10 @@ import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
     
-    
 
     @IBOutlet var sceneView: ARSCNView!
     var trackerNode: SCNNode!
+    var diceNode: SCNNode!
     var trackingPostion = SCNVector3Make(0.0, 0.0, 0.0)
     var started = false
     var foundSurface = false
@@ -30,7 +30,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/3d-model.dae")!
+
+        let scene = SCNScene(named: "art.scnassets/Orange.dae")!
         
         // Set the scene to the view
         sceneView.scene = scene
@@ -51,6 +52,40 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Pause the view's session
         sceneView.session.pause()
+    }
+    
+    
+    func flipCoin(coin: SCNNode) {
+        if diceNode.physicsBody == nil {
+            diceNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        }
+        diceNode.physicsBody?.applyForce(SCNVector3Make(0.0, 3.0, 0.0), asImpulse: true)
+        diceNode.physicsBody?.applyTorque(SCNVector4Make(1.0, 1.0, 1.0, 0.1), asImpulse: true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if started {
+            flipCoin(coin: diceNode)
+          
+        } else {
+            trackerNode.removeFromParentNode()
+            started = true
+            
+            let floorPlane = SCNPlane(width: 50.0, height: 50.0)
+            floorPlane.firstMaterial?.diffuse.contents = UIColor.clear
+            
+            let floorNode = SCNNode(geometry: floorPlane)
+            floorNode.position = trackingPostion
+            floorNode.eulerAngles.x = -.pi * 0.5
+            sceneView.scene.rootNode.addChildNode(floorNode)
+            floorNode.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+            
+            
+            guard let dice = sceneView.scene.rootNode.childNode(withName: "orange", recursively: false) else { return }
+            diceNode = dice
+            diceNode.position = SCNVector3Make(trackingPostion.x, trackingPostion.y + 0.05, trackingPostion.z)
+            diceNode.isHidden = false
+        }
     }
     
     
