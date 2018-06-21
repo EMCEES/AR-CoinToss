@@ -12,7 +12,6 @@ import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
     
-    
 
     @IBOutlet var sceneView: ARSCNView!
     var trackerNode: SCNNode!
@@ -30,7 +29,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let scene = SCNScene(named: "art.scnassets/3d-model.dae                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ")!
         
         // Set the scene to the view
         sceneView.scene = scene
