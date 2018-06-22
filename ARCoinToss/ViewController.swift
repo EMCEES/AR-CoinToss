@@ -11,6 +11,7 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
+
     
 
     @IBOutlet var sceneView: ARSCNView!
@@ -31,7 +32,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a new scene
 
-        let scene = SCNScene(named: "art.scnassets/Orange.dae")!
+        let scene = SCNScene(named: "art.scnassets/model.dae")!
         
         // Set the scene to the view
         sceneView.scene = scene
@@ -81,13 +82,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             floorNode.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
             
             
-            guard let dice = sceneView.scene.rootNode.childNode(withName: "orange", recursively: false) else { return }
+            guard let dice = sceneView.scene.rootNode.childNode(withName: "model", recursively: false) else { return }
             diceNode = dice
             diceNode.position = SCNVector3Make(trackingPostion.x, trackingPostion.y + 0.05, trackingPostion.z)
             diceNode.isHidden = false
         }
     }
-    
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         guard !started else { return }
